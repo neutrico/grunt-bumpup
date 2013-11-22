@@ -1,16 +1,17 @@
 /*
  * Increase version number
  *
- * grunt push
- * grunt push:git
- * grunt push:patch
- * grunt push:minor
- * grunt push:major
+ * grunt bumpup
+ * grunt bumpup:git
+ * grunt bumpup:patch
+ * grunt bumpup:minor
+ * grunt bumpup:major
  *
  * @author Vojta Jina <vojta.jina@gmail.com>
  * @author Mathias Paumgarten <mail@mathias-paumgarten.com>
  * @author Adam Biggs <email@adambig.gs>
  * @author Achim Sperling <achim.sperling@gmail.com>
+ * @author Marcin Antczak <marcin.antczak@neutrico.pl>
  */
 var semver = require('semver');
 var exec = require('child_process').exec;
@@ -18,7 +19,7 @@ var exec = require('child_process').exec;
 module.exports = function(grunt) {
 
   var DESC = 'Increment the version, commit, tag and push.';
-  grunt.registerTask('push', DESC, function(versionType, incOrCommitOnly) {
+  grunt.registerTask('bumpup', DESC, function(versionType, incOrCommitOnly) {
     var opts = this.options({
       bumpVersion: true,
       files: ['package.json'],
@@ -77,13 +78,13 @@ module.exports = function(grunt) {
     var queue = [];
     var next = function() {
       if (!queue.length) {
-        return done();
+	return done();
       }
       queue.shift()();
     };
     var runIf = function(condition, behavior) {
       if (condition) {
-        queue.push(behavior);
+	queue.push(behavior);
       }
     };
 
@@ -91,43 +92,48 @@ module.exports = function(grunt) {
     // MAKE SURE WE'RE ON A RELEASE BRANCH
     runIf(opts.releaseBranch, function() {
       if (opts.npm || opts.commit || opts.push) {
-        exec('git rev-parse --abbrev-ref HEAD', function(err, stdout, stderr) {
-          
-          if (err || stderr) {
-            grunt.fatal('Cannot determine current branch.');
-          }
+	exec('git rev-parse --abbrev-ref HEAD', function(err, stdout, stderr) {
 
-          var currentBranch = stdout.trim();
-          var rBranches = (typeof opts.releaseBranch == 'string') ? [opts.releaseBranch] : opts.releaseBranch;
+	  if (err || stderr) {
+	    grunt.fatal('Cannot determine current branch.');
+	  }
 
-          rBranches.forEach(function(rBranch) {
-            if (rBranch == currentBranch) {
-              return next();
-            }
-          });
+	  var currentBranch = stdout.trim();
+	  var rBranches = (typeof opts.releaseBranch == 'string') ? [opts.releaseBranch] : opts.releaseBranch;
 
-          grunt.warn('The current branch is not in the list of release branches.');
+	  rBranches.forEach(function(rBranch) {
+	    if (rBranch == currentBranch) {
+	      return next();
+	    }
+	  });
 
-          // Allow for --force
-          next();
-        });
+	  grunt.warn('The current branch is not in the list of release branches.');
+
+	  // Allow for --force
+	  next();
+	});
       }
     });
-    
+
 
     var globalVersion; // when bumping multiple files
     var gitVersion;    // when bumping using `git describe`
-    var VERSION_REGEXP = /(\bversion[\'\"]?\s*[:=]\s*[\'\"])([\da-z\.-]+)([\'\"])/i;
+
+      // This will match quoted and unquoted 'version' or Version and PHP syntax arrays =>
+
+    var VERSION_REGEXP = /([\'|\"]?[Vv]ersion[\'|\"]?[ ]*[:|=|=][>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
+    // var VERSION_REGEXP = /(\bversion[\'\"]?\s*[:=]\s*[\'\"])([\da-z\.-]+)([\'\"])/i;
+
 
 
     // GET VERSION FROM GIT
     runIf(opts.bumpVersion && versionType === 'git', function(){
       exec('git describe ' + opts.gitDescribeOptions, function(err, stdout, stderr){
-        if (err) {
-          grunt.fatal('Can not get a version number using `git describe`');
-        }
-        gitVersion = stdout.trim();
-        next();
+	if (err) {
+	  grunt.fatal('Can not get a version number using `git describe`');
+	}
+	gitVersion = stdout.trim();
+	next();
       });
     });
 
@@ -135,38 +141,38 @@ module.exports = function(grunt) {
     // BUMP ALL FILES
     runIf(opts.bumpVersion, function(){
       opts.files.forEach(function(file, idx) {
-        var version = null;
-        var content = grunt.file.read(file).replace(VERSION_REGEXP, function(match, prefix, parsedVersion, suffix) {
-          version = gitVersion || semver.inc(parsedVersion, versionType || 'patch');
-          return prefix + version + suffix;
-        });
+	var version = null;
+	var content = grunt.file.read(file).replace(VERSION_REGEXP, function(match, prefix, parsedVersion, suffix) {
+	  version = gitVersion || semver.inc(parsedVersion, versionType || 'patch');
+	  return prefix + version + suffix;
+	});
 
-        if (!version) {
-          grunt.fatal('Can not find a version to bump in ' + file);
-        }
+	if (!version) {
+	  grunt.fatal('Can not find a version to bump in ' + file);
+	}
 
-        grunt.file.write(file, content);
-        grunt.log.ok('Version bumped to ' + version + (opts.files.length > 1 ? ' (in ' + file + ')' : ''));
+	grunt.file.write(file, content);
+	grunt.log.ok('Version bumped to ' + version + (opts.files.length > 1 ? ' (in ' + file + ')' : ''));
 
-        if (!globalVersion) {
-          globalVersion = version;
-        } else if (globalVersion !== version) {
-          grunt.warn('Bumping multiple files with different versions!');
-        }
+	if (!globalVersion) {
+	  globalVersion = version;
+	} else if (globalVersion !== version) {
+	  grunt.warn('Bumping multiple files with different versions!');
+	}
 
-        var configProperty = opts.updateConfigs[idx];
-        if (!configProperty) {
-          return;
-        }
+	var configProperty = opts.updateConfigs[idx];
+	if (!configProperty) {
+	  return;
+	}
 
-        var cfg = grunt.config(configProperty);
-        if (!cfg) {
-          return grunt.warn('Can not update "' + configProperty + '" config, it does not exist!');
-        }
+	var cfg = grunt.config(configProperty);
+	if (!cfg) {
+	  return grunt.warn('Can not update "' + configProperty + '" config, it does not exist!');
+	}
 
-        cfg.version = version;
-        grunt.config(configProperty, cfg);
-        grunt.log.ok(configProperty + '\'s version updated');
+	cfg.version = version;
+	grunt.config(configProperty, cfg);
+	grunt.log.ok(configProperty + '\'s version updated');
       });
       next();
     });
@@ -175,9 +181,9 @@ module.exports = function(grunt) {
     // when only commiting, read the version from package.json / pkg config
     runIf(!opts.bumpVersion, function() {
       if (opts.updateConfigs.length) {
-        globalVersion = grunt.config(opts.updateConfigs[0]).version;
+	globalVersion = grunt.config(opts.updateConfigs[0]).version;
       } else {
-        globalVersion = grunt.file.readJSON(opts.files[0]).version;
+	globalVersion = grunt.file.readJSON(opts.files[0]).version;
       }
 
       next();
@@ -187,11 +193,11 @@ module.exports = function(grunt) {
     // ADD
     runIf(opts.add, function() {
       exec('git add ' + opts.addFiles.join(' '), function(err, stdout, stderr) {
-        if (err) {
-          grunt.fatal('Can not add files:\n  ' + stderr);
-        }
-        grunt.log.ok('Added files: "' + opts.addFiles.join(' ') + '"');
-        next();
+	if (err) {
+	  grunt.fatal('Can not add files:\n  ' + stderr);
+	}
+	grunt.log.ok('Added files: "' + opts.addFiles.join(' ') + '"');
+	next();
       });
     });
 
@@ -201,11 +207,11 @@ module.exports = function(grunt) {
       var commitMessage = opts.commitMessage.replace('%VERSION%', globalVersion);
 
       exec('git commit ' + opts.commitFiles.join(' ') + ' -m "' + commitMessage + '"', function(err, stdout, stderr) {
-        if (err) {
-          grunt.fatal('Can not create the commit:\n  ' + stderr);
-        }
-        grunt.log.ok('Committed as "' + commitMessage + '"');
-        next();
+	if (err) {
+	  grunt.fatal('Can not create the commit:\n  ' + stderr);
+	}
+	grunt.log.ok('Committed as "' + commitMessage + '"');
+	next();
       });
     });
 
@@ -216,11 +222,11 @@ module.exports = function(grunt) {
       var tagMessage = opts.tagMessage.replace('%VERSION%', globalVersion);
 
       exec('git tag -a ' + tagName + ' -m "' + tagMessage + '"' , function(err, stdout, stderr) {
-        if (err) {
-          grunt.fatal('Can not create the tag:\n  ' + stderr);
-        }
-        grunt.log.ok('Tagged as "' + tagName + '"');
-        next();
+	if (err) {
+	  grunt.fatal('Can not create the tag:\n  ' + stderr);
+	}
+	grunt.log.ok('Tagged as "' + tagName + '"');
+	next();
       });
     });
 
@@ -228,11 +234,11 @@ module.exports = function(grunt) {
     // PUSH CHANGES
     runIf(opts.push, function() {
       exec('git push ' + opts.pushTo + ' && git push ' + opts.pushTo + ' --tags', function(err, stdout, stderr) {
-        if (err) {
-          grunt.fatal('Can not push to ' + opts.pushTo + ':\n  ' + stderr);
-        }
-        grunt.log.ok('Pushed to ' + opts.pushTo);
-        next();
+	if (err) {
+	  grunt.fatal('Can not push to ' + opts.pushTo + ':\n  ' + stderr);
+	}
+	grunt.log.ok('Pushed to ' + opts.pushTo);
+	next();
       });
     });
 
@@ -242,11 +248,11 @@ module.exports = function(grunt) {
       opts.npmTag.replace('%VERSION%', globalVersion);
 
       exec('npm publish --tag "' + opts.npmTag + '"', function(err, stdout, stderr) {
-        if (err) {
-          grunt.fatal('Publishing to NPM failed:\n  ' + stderr);
-        }
-        grunt.log.ok('Published to NPM with tag:' + opts.npmTag);
-        next();
+	if (err) {
+	  grunt.fatal('Publishing to NPM failed:\n  ' + stderr);
+	}
+	grunt.log.ok('Published to NPM with tag:' + opts.npmTag);
+	next();
       });
     });
 
@@ -257,7 +263,8 @@ module.exports = function(grunt) {
   // ALIASES
   DESC = 'Increment the version only.';
   grunt.registerTask('bump-only', DESC, function(versionType) {
-    grunt.task.run('push:' + (versionType || '') + ':bump-only');
+    // grunt.task.run('push:' + (versionType || '') + ':bump-only');
+    grunt.task.run('bumpup:' + (versionType || '') + ':bump-only');
   });
 
   DESC = 'Add, commit, tag, push without incrementing the version.';
@@ -270,7 +277,7 @@ module.exports = function(grunt) {
 
   DESC = 'Just publish to NPM.';
   grunt.registerTask('push-publish', DESC, function(versionType) {
-    grunt.task.run('push:' + (versionType || '') + ':push-publish');
+    // grunt.task.run('push:' + (versionType || '') + ':push-publish');
+    grunt.task.run('bumpup:' + (versionType || '') + ':push-publish');
   });
 };
-

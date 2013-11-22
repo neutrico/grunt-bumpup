@@ -1,52 +1,53 @@
 {
-  "name": "grunt-push-release",
-  "description": "Bump package version, create tag, commit, push...",
-  "version": "0.1.8",
-  "homepage": "https://github.com/JonnyBGod/grunt-push-release",
-  "author": {
-    "name": "Joao Ribeiro",
-    "email": "jonnybgod@gmail.com"
-  },
-  "contributors": [
-    "Vojta Jína <vojta.jina@gmail.com>",
-    "Mathias Paumgarten <paumgarten@soapcreative.com>",
-    "adam j. sontag <ajpiano@ajpiano.com>",
-    "travis4all <travis4all@diamon.dz>",
-    "RobinQu <robinqu@gmail.com>",
-    "Snugug <snugug@gmail.com>",
-    "Adam Biggs <adam.biggs@lightmaker.com>",
-    "ylesaout <ylesaout@gmail.com>",
-    "Gavin <gavin@kodekoan.com>",
-    "Mathias Paumgarten <mail@mathias-paumgarten.com>",
-    "Mayhem <stepien.nicolas@gmail.com>",
-    "Achim Sperling <achim.sperling@gmail.com>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/JonnyBGod/grunt-push-release.git"
-  },
-  "bugs": {
-    "url": "https://github.com/JonnyBGod/grunt-push-release/issues"
-  },
-  "main": "grunt.js",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
-  "scripts": {
-    "test": "grunt test"
-  },
-  "dependencies": {
-    "semver": "~1.1"
-  },
-  "peerDependencies": {
-    "grunt": "~0.4"
-  },
-  "devDependencies": {
-    "grunt": "~0.4",
-    "grunt-npm": "~0.0.1",
-    "grunt-auto-release": "~0.0.3"
-  },
-  "keywords": [
-    "gruntplugin"
-  ]
+    "name": "grunt-bumpup",
+    "description": "Bump up package version, create tag, commit, push...",
+    "version": "0.0.1",
+    "homepage": "https://github.com/neutrico/grunt-bumpup",
+    "author": {
+	"name": "Marcin Antczak",
+	"email": "marcin.antczak@neutrico.pl"
+    },
+    "contributors": [
+	"Vojta Jína <vojta.jina@gmail.com>",
+	"Mathias Paumgarten <paumgarten@soapcreative.com>",
+	"adam j. sontag <ajpiano@ajpiano.com>",
+	"travis4all <travis4all@diamon.dz>",
+	"RobinQu <robinqu@gmail.com>",
+	"Snugug <snugug@gmail.com>",
+	"Adam Biggs <adam.biggs@lightmaker.com>",
+	"ylesaout <ylesaout@gmail.com>",
+	"Gavin <gavin@kodekoan.com>",
+	"Mathias Paumgarten <mail@mathias-paumgarten.com>",
+	"Mayhem <stepien.nicolas@gmail.com>",
+	"Achim Sperling <achim.sperling@gmail.com>",
+	"Joao Ribeiro <jonnybgod@gmail.com>"
+    ],
+    "repository": {
+	"type": "git",
+	"url": "git://github.com/neutrico/grunt-bumpup.git"
+    },
+    "bugs": {
+	"url": "https://github.com/neutrico/grunt-bumpup/issues"
+    },
+    "main": "grunt.js",
+    "engines": {
+	"node": ">= 0.8.0"
+    },
+    "scripts": {
+	"test": "grunt test"
+    },
+    "dependencies": {
+	"semver": "~1.1"
+    },
+    "peerDependencies": {
+	"grunt": "~0.4"
+    },
+    "devDependencies": {
+	"grunt": "~0.4",
+	"grunt-npm": "~0.0.1",
+	"grunt-auto-release": "~0.0.3"
+    },
+    "keywords": [
+	"gruntplugin"
+    ]
 }
