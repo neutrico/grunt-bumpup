@@ -1,4 +1,4 @@
-# grunt-push-release
+# grunt-bumpup
 
 **Bump package version, create tag, commit, push...**
 
@@ -6,11 +6,11 @@
 
 Install npm package, next to your project's `Gruntfile.js` file:
 
-    npm install grunt-push-release --save-dev
+    npm install grunt-bumpup --save-dev
 
 Add this line to your project's `Gruntfile.js`:
 
-    grunt.loadNpmTasks('grunt-push-release');
+    grunt.loadNpmTasks('grunt-bumpup');
 
 
 ## Usage
