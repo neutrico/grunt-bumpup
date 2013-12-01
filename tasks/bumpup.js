@@ -124,8 +124,9 @@ module.exports = function(grunt) {
     // var VERSION_REGEXP = /([\'|\"]?[Vv]ersion[\'|\"]?[ ]*[:|=|=][>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
     // var VERSION_REGEXP = /([\'|\"]?[@]?[Vv]ersion[\'|\"]?[ ]*[:|=|=]?[>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
     // var VERSION_REGEXP = /(\bversion[\'\"]?\s*[:=]\s*[\'\"])([\da-z\.-]+)([\'\"])/i;
+    // var VERSION_REGEXP = /([\'|\"]?[*]?[ ]?[@]?[Vv]ersion[\'|\"]?[ ]*[:|=|=]?[>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
 
-    var VERSION_REGEXP = /([\'|\"]?[*]?[ ]?[@]?[Vv]ersion[\'|\"]?[ ]*[:|=|=]?[>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
+    var VERSION_REGEXP = /([\'|\"|\@]?[Vv]ersion[\'|\"]?[ ]*[:|=|=]?[>]?[ ]*[\'|\"]?)([\d||A-a|.|-].[\d||A-a|.|-].[\d||A-a|.|-]*)([\'|\"]?)/i;
 
     // GET VERSION FROM GIT
     runIf(opts.bumpVersion && versionType === 'git', function(){
