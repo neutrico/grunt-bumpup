@@ -121,7 +121,9 @@ module.exports = function(grunt) {
 
       // This will match quoted and unquoted 'version' or Version and PHP syntax arrays =>
 
-    var VERSION_REGEXP = /([\'|\"]?[Vv]ersion[\'|\"]?[ ]*[:|=|=][>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
+    // var VERSION_REGEXP = /([\'|\"]?[Vv]ersion[\'|\"]?[ ]*[:|=|=][>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
+
+    var VERSION_REGEXP = /([\'|\"]?[@]?[Vv]ersion[\'|\"]?[ ]*[:|=|=]?[>]?[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
     // var VERSION_REGEXP = /(\bversion[\'\"]?\s*[:=]\s*[\'\"])([\da-z\.-]+)([\'\"])/i;
 
 
