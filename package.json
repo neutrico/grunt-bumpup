@@ -1,7 +1,7 @@
 {
     "name": "grunt-nux-bumpup",
     "description": "Bump up package version, create tag, commit, push...",
-    "version": "0.9.2",
+    "version": "0.9.4",
     "homepage": "https://github.com/neutrico/grunt-bumpup",
     "author": {
         "name": "Marcin Antczak",
