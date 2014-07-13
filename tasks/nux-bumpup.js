@@ -19,7 +19,7 @@ var exec = require('child_process').exec;
 module.exports = function(grunt) {
 
   var DESC = 'Increment the version, commit, tag and push.';
-  grunt.registerTask('bumpup', DESC, function(versionType, incOrCommitOnly) {
+  grunt.registerTask('nux-bumpup', DESC, function(versionType, incOrCommitOnly) {
     var opts = this.options({
       bumpVersion: true,
       files: ['package.json'],
@@ -266,7 +266,7 @@ module.exports = function(grunt) {
   DESC = 'Increment the version only.';
   grunt.registerTask('bump-only', DESC, function(versionType) {
     // grunt.task.run('push:' + (versionType || '') + ':bump-only');
-    grunt.task.run('bumpup:' + (versionType || '') + ':bump-only');
+    grunt.task.run('nux-bumpup:' + (versionType || '') + ':bump-only');
   });
 
   DESC = 'Add, commit, tag, push without incrementing the version.';
@@ -280,6 +280,6 @@ module.exports = function(grunt) {
   DESC = 'Just publish to NPM.';
   grunt.registerTask('push-publish', DESC, function(versionType) {
     // grunt.task.run('push:' + (versionType || '') + ':push-publish');
-    grunt.task.run('bumpup:' + (versionType || '') + ':push-publish');
+    grunt.task.run('nux-bumpup:' + (versionType || '') + ':push-publish');
   });
 };

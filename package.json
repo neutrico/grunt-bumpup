@@ -2,7 +2,7 @@
     "name": "grunt-nux-bumpup",
     "description": "Bump up package version, create tag, commit, push...",
     "version": "0.9.4",
-    "homepage": "https://github.com/neutrico/grunt-bumpup",
+    "homepage": "https://github.com/neutrico/grunt-nux-bumpup",
     "author": {
         "name": "Marcin Antczak",
         "email": "marcin.antczak@neutrico-themes.pl"
@@ -24,10 +24,10 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git://github.com/neutrico/grunt-bumpup.git"
+        "url": "git://github.com/neutrico/grunt-nux-bumpup.git"
     },
     "bugs": {
-        "url": "https://github.com/neutrico/grunt-bumpup/issues"
+        "url": "https://github.com/neutrico/grunt-nux-bumpup/issues"
     },
     "main": "Gruntfile.coffee",
     "engines": {
