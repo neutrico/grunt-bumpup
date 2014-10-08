@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     grunt.registerTask('nux-bumpup', DESC, function(versionType, incOrCommitOnly) {
 	var opts = this.options({
 	    bumpVersion: true,
-	    files: ['package.json', '.yo-rc.json'],
+	    files: ['package.json'],
 	    updateConfigs: [], // array of config properties to update (with files)
 	    releaseBranch: false,
 	    add: true,
